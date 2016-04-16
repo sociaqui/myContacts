@@ -58,9 +58,22 @@
         <div class="col-xs-4">
             <h3>e-mail accounts:</h3>
             <ul>
-                <li>Placeholder</li>
-                <li>
-                    <a class="btn btn-success btn-sm" href="#"
+                {% for email in contact.emails %}
+                    <li style="margin-top: 10px">
+                        {{  email.type }}{% if email.type is not null %}:<br/>{% endif %}
+                        {{ email.address }}
+                        <a class="btn btn-primary btn-xs"
+                           href="{{ path('coderslab_email_modify',{'id': contact.id,'emailId': email.id}) }}"
+                           role="button">Modify</a>
+                        <a class="btn btn-danger btn-xs"
+                           href="{{ path('coderslab_email_delete',{'id': contact.id,'emailId': email.id}) }}"
+                           role="button">Delete</a>
+
+                    </li>
+                {% endfor %}
+                <li style="margin-top: 10px">
+                    <a class="btn btn-success btn-sm"
+                       href="{{ path('coderslab_email_new',{'id': contact.id}) }}"
                        role="button">Add</a>
                 </li>
             </ul>
