@@ -7,12 +7,29 @@
 {% endblock %}
 
 {% block body %}
+    <div class="container" style="width: 900px; margin: 0 auto; margin-top: 20px">
+        <a class="btn btn-primary btn-sm" href="{{ path('coderslab_contact_new') }}" role="button">Add a new contact</a>
+        <a class="btn btn-primary btn-sm" href="#" role="button">Groups</a>
+        <a class="btn btn-primary btn-sm" href="#" role="button">Add a new contact</a>
+        <h1>Contact list:</h1>
 
-    {% for contact in contacts %}
-        <div class="well well-sm" style="width: 750px; margin: 0 auto; margin-top: 20px;">
-            <h1>{{ contact.name }} {{ contact.surname }}</h1>
-            <p>{{ contact.description }}</p>
-        </div>
-    {% endfor %}
+        {% for contact in contacts %}
+            <div class="container well well-sm" style="width: 750px; margin: 0 auto; margin-top: 20px">
+                <div class="col-xs-8">
+                    <h1>{{ contact.surname }} {{ contact.name }}</h1>
+                    <p>{{ contact.description }}</p>
+                </div>
+                <div class="col-xs-4" style="margin-top: 15px">
+                    <a class="btn btn-primary btn-sm" href="{{ path('coderslab_contact_show',{'id': contact.id}) }}"
+                       role="button">Show</a>
+                    <a class="btn btn-primary btn-sm" href="{{ path('coderslab_contact_modify',{'id': contact.id}) }}"
+                       role="button">Modify</a>
+                    <a class="btn btn-danger btn-sm" href="{{ path('coderslab_contact_delete',{'id': contact.id}) }}"
+                       role="button">Delete</a>
+                </div>
+            </div>
+        {% endfor %}
+
+    </div>
 
 {% endblock %}

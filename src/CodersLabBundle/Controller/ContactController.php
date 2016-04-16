@@ -22,7 +22,7 @@ class ContactController extends Controller
 
         $form = $this->createContactForm($contact);
 
-        return ['form'=>$form->createView()];
+        return ['form' => $form->createView()];
     }
 
     /**
@@ -35,12 +35,12 @@ class ContactController extends Controller
         $contact = new Contact();
         $form = $this->createContactForm($contact);
         $form->handleRequest($request);
-        if ($form->isSubmitted()){
+        if ($form->isSubmitted()) {
             $this->getDoctrine()->getManager()->persist($contact);
             $this->getDoctrine()->getManager()->flush();
-            return $this->redirectToRoute('coderslab_contact_show', ['id'=>$contact->getId()]);
+            return $this->redirectToRoute('coderslab_contact_show', ['id' => $contact->getId()]);
         }
-        return ['form'=>$form->createView()];
+        return ['form' => $form->createView()];
     }
 
     /**
@@ -56,13 +56,13 @@ class ContactController extends Controller
             ->getRepository('CodersLabBundle:Contact')
             ->find($id);
 
-        if(!$contact){
+        if (!$contact) {
             throw $this->createNotFoundException('No such contact');
         }
 
         $form = $this->createContactForm($contact);
 
-        return ['form'=>$form->createView()];
+        return ['form' => $form->createView()];
     }
 
     /**
@@ -78,19 +78,67 @@ class ContactController extends Controller
             ->getRepository('CodersLabBundle:Contact')
             ->find($id);
 
-        if(!$contact){
+        if (!$contact) {
             throw $this->createNotFoundException('No such contact');
         }
 
         $form = $this->createContactForm($contact);
         $form->handleRequest($request);
 
-        if ($form->isSubmitted()){
+        if ($form->isSubmitted()) {
             $this->getDoctrine()->getManager()->flush();
-            return $this->redirectToRoute('coderslab_contact_show', ['id'=>$contact->getId()]);
+            return $this->redirectToRoute('coderslab_contact_show', ['id' => $contact->getId()]);
         }
 
-        return ['form'=>$form->createView()];
+        return ['form' => $form->createView()];
+    }
+
+    /**
+     * @Route ("/{id}/delete",
+     *        requirements={"id"="\d+"})
+     * @Method ("GET")
+     */
+    public function deleteAction(Request $request, $id)
+    {
+        $contact = $this->getDoctrine()->getRepository('CodersLabBundle:Contact')->find($id);
+
+        if (!$contact) {
+            throw $this->createNotFoundException('Contact not found');
+        }
+
+        $entitymanager = $this->getDoctrine()->getManager();
+
+        $entitymanager->remove($contact);
+        $entitymanager->flush();
+
+        return $this->redirectToRoute("coderslab_contact_showAll");
+    }
+
+    /**
+     * @Route("/{id}",
+     *        requirements={"id"="\d+"})
+     * @Method ("GET")
+     * @Template()
+     */
+    public function showAction(Request $request, $id)
+    {
+        $contact = $this->getDoctrine()->getRepository('CodersLabBundle:Contact')->find($id);
+
+        if (!$contact) {
+            throw $this->createNotFoundException('Contact not found');
+        }
+
+        return ['contact' => $contact];
+    }
+
+    /**
+     * @Route("/")
+     * @Method ("GET")
+     * @Template()
+     */
+    public function showAllAction(Request $request)
+    {
+        return ['contacts' => $this->getDoctrine()->getRepository('CodersLabBundle:Contact')->findBy([], ['surname' => 'ASC'])];
     }
 
     private function createContactForm($contact)
@@ -104,53 +152,16 @@ class ContactController extends Controller
         return $form;
     }
 
-    /**
-     * @Route ("/{id}/delete",
-     *        requirements={"id"="\d+"})
-     * @Method ("GET")
-     * @Template ()
-     */
-    public function deleteAction(Request $request, $id)
+    private function createAddressForm($address)
     {
-        $contact = $this->getDoctrine()->getRepository('CodersLabBundle:Contact')->find($id);
-
-        if (!$contact){
-            throw $this->createNotFoundException('Contact not found');
-        }
-
-        $entitymanager = $this->getDoctrine()->getManager();
-
-        $entitymanager->remove($contact);
-        $entitymanager->flush();
-
-        return [];
-    }
-
-    /**
-     * @Route("/{id}",
-     *        requirements={"id"="\d+"})
-     * @Method ("GET")
-     * @Template()
-     */
-    public function showAction(Request $request, $id)
-    {
-        $contact=$this->getDoctrine()->getRepository('CodersLabBundle:Contact')->find($id);
-
-        if (!$contact){
-            throw $this->createNotFoundException('Contact not found');
-        }
-
-        return ['contact'=>$contact];
-    }
-
-    /**
-     * @Route("/")
-     * @Method ("GET")
-     * @Template()
-     */
-    public function showAllAction(Request $request)
-    {
-        return ['contacts'=>$this->getDoctrine()->getRepository('CodersLabBundle:Contact')->findAll()];
+        $form = $this->createFormBuilder($address)
+            ->add('city')
+            ->add('street')
+            ->add('houseNumber')
+            ->add('appartamentNumber')
+            ->add('Submit', 'submit')
+            ->getForm();
+        return $form;
     }
 
 }

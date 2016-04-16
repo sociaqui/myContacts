@@ -42,6 +42,19 @@ class Contact
      */
     private $description;
 
+    /**
+     * @ORM\OneToMany(targetEntity="Address", mappedBy="contact")
+     */
+    private $addresses;
+
+
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->addresses = new \Doctrine\Common\Collections\ArrayCollection();
+    }
 
     /**
      * Get id
@@ -120,5 +133,38 @@ class Contact
     public function getDescription()
     {
         return $this->description;
+    }
+
+    /**
+     * Add address
+     *
+     * @param \CodersLabBundle\Entity\Address $address
+     * @return Contact
+     */
+    public function addAddress(\CodersLabBundle\Entity\Address $address)
+    {
+        $this->addresses[] = $address;
+
+        return $this;
+    }
+
+    /**
+     * Remove address
+     *
+     * @param \CodersLabBundle\Entity\Address $address
+     */
+    public function removeAddress(\CodersLabBundle\Entity\Address $address)
+    {
+        $this->addresses->removeElement($address);
+    }
+
+    /**
+     * Get addresses
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getAddresses()
+    {
+        return $this->addresses;
     }
 }

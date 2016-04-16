@@ -7,8 +7,40 @@
 {% endblock %}
 
 {% block body %}
-    <div class="well well-sm" style="width: 750px; margin: 0 auto; margin-top: 20px;">
+    <div class="container well well-sm" style="width: 900px; margin: 0 auto; margin-top: 20px">
         <h1>{{ contact.name }} {{ contact.surname }}</h1>
         <p>{{ contact.description }}</p>
+        <div class="col-xs-4">
+            <h3>Adresses:</h3>
+            <ul>
+                <li>test</li>
+                {% for address in contact.addresses %}
+                    <li>
+                        <p>{{ address.street }} {{ address.houseNumber }} {{ address.appartamentNumber }}</p>
+                        <p>{{ address.city }}</p>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+        <div class="col-xs-4">
+            <h3>Phone numbers:</h3>
+            <ul>
+                {% for address in contact.addresses %}
+                    <li>
+                        <p>{{ address.city }}</p>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+        <div class="col-xs-4">
+            <h3>e-mail accounts:</h3>
+            <ul>
+                {% for address in contact.addresses %}
+                    <li>
+                        <p>{{ address.city }}</p>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
     </div>
 {% endblock %}
