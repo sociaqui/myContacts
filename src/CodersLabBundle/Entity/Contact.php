@@ -52,6 +52,11 @@ class Contact
      */
     private $emails;
 
+    /**
+     * @ORM\OneToMany(targetEntity="Phone", mappedBy="contact", orphanRemoval=true)
+     */
+    private $phones;
+
 
     /**
      * Constructor
@@ -60,6 +65,7 @@ class Contact
     {
         $this->addresses = new \Doctrine\Common\Collections\ArrayCollection();
         $this->emails = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->phones = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -205,5 +211,38 @@ class Contact
     public function getEmails()
     {
         return $this->emails;
+    }
+
+    /**
+     * Add phone
+     *
+     * @param \CodersLabBundle\Entity\Phone $phone
+     * @return Contact
+     */
+    public function addPhone(\CodersLabBundle\Entity\Phone $phone)
+    {
+        $this->phones[] = $phone;
+
+        return $this;
+    }
+
+    /**
+     * Remove phone
+     *
+     * @param \CodersLabBundle\Entity\Phone $phone
+     */
+    public function removePhone(\CodersLabBundle\Entity\Phone $phone)
+    {
+        $this->phones->removeElement($phone);
+    }
+
+    /**
+     * Get phones
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getPhones()
+    {
+        return $this->phones;
     }
 }

@@ -27,7 +27,8 @@
             <ul>
                 {% for address in contact.addresses %}
                     <li style="margin-top: 10px">
-                        {{ address.street }} {{ address.houseNumber }} {{ address.appartamentNumber }}<br/>
+                        {{ address.street }} {{ address.houseNumber }}<br/>
+                        {% if address.appartamentNumber is not null %}app.: {{ address.appartamentNumber }}<br/>{% endif %}
                         {{ address.city }}
                         <a class="btn btn-primary btn-xs"
                            href="{{ path('coderslab_address_modify',{'id': contact.id,'addressId': address.id}) }}"
@@ -48,9 +49,22 @@
         <div class="col-xs-4">
             <h3>Phone numbers:</h3>
             <ul>
-                <li>Placeholder</li>
-                <li>
-                    <a class="btn btn-success btn-sm" href="#"
+                {% for phone in contact.phones %}
+                    <li style="margin-top: 10px">
+                        {% if phone.type is not null %}{{ phone.type }}:<br/>{% endif %}
+                        {{ phone.number }}
+                        <a class="btn btn-primary btn-xs"
+                           href="{{ path('coderslab_phone_modify',{'id': contact.id,'phoneId': phone.id}) }}"
+                           role="button">Modify</a>
+                        <a class="btn btn-danger btn-xs"
+                           href="{{ path('coderslab_phone_delete',{'id': contact.id,'phoneId': phone.id}) }}"
+                           role="button">Delete</a>
+
+                    </li>
+                {% endfor %}
+                <li style="margin-top: 10px">
+                    <a class="btn btn-success btn-sm"
+                       href="{{ path('coderslab_phone_new',{'id': contact.id}) }}"
                        role="button">Add</a>
                 </li>
             </ul>
@@ -60,7 +74,7 @@
             <ul>
                 {% for email in contact.emails %}
                     <li style="margin-top: 10px">
-                        {{  email.type }}{% if email.type is not null %}:<br/>{% endif %}
+                        {% if email.type is not null %}{{ email.type }}:<br/>{% endif %}
                         {{ email.address }}
                         <a class="btn btn-primary btn-xs"
                            href="{{ path('coderslab_email_modify',{'id': contact.id,'emailId': email.id}) }}"
