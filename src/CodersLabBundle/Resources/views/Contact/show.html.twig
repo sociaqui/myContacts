@@ -1,6 +1,6 @@
 {% extends "::base.html.twig" %}
 
-{% block title %}New Contact{% endblock %}
+{% block title %}Contact details{% endblock %}
 
 {% block stylesheets %}
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
@@ -8,38 +8,61 @@
 
 {% block body %}
     <div class="container well well-sm" style="width: 900px; margin: 0 auto; margin-top: 20px">
-        <h1>{{ contact.name }} {{ contact.surname }}</h1>
-        <p>{{ contact.description }}</p>
+        <div class="row">
+            <div class="col-xs-8">
+                <h1>{{ contact.name }} {{ contact.surname }} </h1>
+                <p>{{ contact.description }}</p>
+            </div>
+            <div class="col-xs-4" style="margin-top: 15px">
+                <a class="btn btn-primary btn-sm" href="{{ path('coderslab_contact_showall') }}"
+                   role="button">Back to list</a>
+                <a class="btn btn-primary btn-sm" href="{{ path('coderslab_contact_modify',{'id': contact.id}) }}"
+                   role="button">Modify</a>
+                <a class="btn btn-danger btn-sm" href="{{ path('coderslab_contact_delete',{'id': contact.id}) }}"
+                   role="button">Delete</a>
+            </div>
+        </div>
         <div class="col-xs-4">
             <h3>Adresses:</h3>
             <ul>
-                <li>test</li>
                 {% for address in contact.addresses %}
-                    <li>
-                        <p>{{ address.street }} {{ address.houseNumber }} {{ address.appartamentNumber }}</p>
-                        <p>{{ address.city }}</p>
+                    <li style="margin-top: 10px">
+                        {{ address.street }} {{ address.houseNumber }} {{ address.appartamentNumber }}<br/>
+                        {{ address.city }}
+                        <a class="btn btn-primary btn-xs"
+                           href="{{ path('coderslab_contact_modifyaddress',{'id': contact.id,'addressId': address.id}) }}"
+                           role="button">Modify</a>
+                        <a class="btn btn-danger btn-xs"
+                           href="{{ path('coderslab_contact_deleteaddress',{'id': contact.id,'addressId': address.id}) }}"
+                           role="button">Delete</a>
+
                     </li>
                 {% endfor %}
+                <li style="margin-top: 10px">
+                    <a class="btn btn-success btn-sm"
+                       href="{{ path('coderslab_contact_newaddress',{'id': contact.id}) }}"
+                       role="button">Add</a>
+                </li>
             </ul>
         </div>
         <div class="col-xs-4">
             <h3>Phone numbers:</h3>
             <ul>
-                {% for address in contact.addresses %}
-                    <li>
-                        <p>{{ address.city }}</p>
-                    </li>
-                {% endfor %}
+                <li>Placeholder</li>
+                <li>
+                    <a class="btn btn-success btn-sm" href="#"
+                       role="button">Add</a>
+                </li>
             </ul>
         </div>
         <div class="col-xs-4">
             <h3>e-mail accounts:</h3>
             <ul>
-                {% for address in contact.addresses %}
-                    <li>
-                        <p>{{ address.city }}</p>
-                    </li>
-                {% endfor %}
+                <li>Placeholder</li>
+                <li>
+                    <a class="btn btn-success btn-sm" href="#"
+                       role="button">Add</a>
+                </li>
             </ul>
         </div>
     </div>

@@ -1,6 +1,6 @@
 {% extends "::base.html.twig" %}
 
-{% block title %}New Contact{% endblock %}
+{% block title %}Contact Book{% endblock %}
 
 {% block stylesheets %}
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
@@ -10,7 +10,7 @@
     <div class="container" style="width: 900px; margin: 0 auto; margin-top: 20px">
         <a class="btn btn-primary btn-sm" href="{{ path('coderslab_contact_new') }}" role="button">Add a new contact</a>
         <a class="btn btn-primary btn-sm" href="#" role="button">Groups</a>
-        <a class="btn btn-primary btn-sm" href="#" role="button">Add a new contact</a>
+        <a class="btn btn-primary btn-sm" href="#" role="button">Search</a>
         <h1>Contact list:</h1>
 
         {% for contact in contacts %}

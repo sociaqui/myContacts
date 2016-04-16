@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Contact
  *
- * @ORM\Table()
+ * @ORM\Table(name="contacts")
  * @ORM\Entity(repositoryClass="CodersLabBundle\Entity\ContactRepository")
  */
 class Contact
@@ -43,7 +43,7 @@ class Contact
     private $description;
 
     /**
-     * @ORM\OneToMany(targetEntity="Address", mappedBy="contact")
+     * @ORM\OneToMany(targetEntity="Address", mappedBy="contact", orphanRemoval=true)
      */
     private $addresses;
 

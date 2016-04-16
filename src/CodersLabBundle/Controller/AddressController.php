@@ -10,34 +10,39 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Component\HttpFoundation\Request;
 
-class ContactController extends Controller
+class AddressController extends Controller
 {
     /**
-     * @Route("/new")
+     * @Route("/{id}/addAddress",
+     *        requirements={"id"="\d+"})
      * @Method ("GET")
      * @Template("CodersLabBundle:Contact:form.html.twig")
      */
-    public function newAction(Request $request)
+    public function newAddressAction(Request $request)
     {
-        $contact = new Contact();
+        $address = new Address();
 
-        $form = $this->createContactForm($contact);
+        $form = $this->createAddressForm($address);
 
         return ['form' => $form->createView()];
     }
 
     /**
-     * @Route("/new")
+     * @Route("/{id}/addAddress",
+     *        requirements={"id"="\d+"})
      * @Method ("POST")
      * @Template("CodersLabBundle:Contact:form.html.twig")
      */
-    public function createAction(Request $request)
+    public function createAddressAction(Request $request, $id)
     {
-        $contact = new Contact();
-        $form = $this->createContactForm($contact);
+        $contact = $this->getDoctrine()->getRepository('CodersLabBundle:Contact')->find($id);
+        $address = new Address();
+        $form = $this->createAddressForm($address);
         $form->handleRequest($request);
         if ($form->isSubmitted()) {
-            $this->getDoctrine()->getManager()->persist($contact);
+            $this->getDoctrine()->getManager()->persist($address);
+            $address->setContact($contact);
+            $contact->addAddress($address);
             $this->getDoctrine()->getManager()->flush();
             return $this->redirectToRoute('coderslab_contact_show', ['id' => $contact->getId()]);
         }
@@ -45,16 +50,16 @@ class ContactController extends Controller
     }
 
     /**
-     * @Route("/{id}/modify",
-     *        requirements={"id"="\d+"})
+     * @Route("/{id}/modifyAddress/{addressId}",
+     *        requirements={"id"="\d+", "addressId"="\d+"})
      * @Method ("GET")
      * @Template("CodersLabBundle:Contact:form.html.twig")
      */
-    public function modifyAction(Request $request, $id)
+    public function modifyAddressAction(Request $request, $id, $addressId)
     {
         $contact = $this
             ->getDoctrine()
-            ->getRepository('CodersLabBundle:Contact')
+            ->getRepository('CodersLabBundle:Address')
             ->find($id);
 
         if (!$contact) {
@@ -67,12 +72,12 @@ class ContactController extends Controller
     }
 
     /**
-     * @Route("/{id}/modify",
-     *        requirements={"id"="\d+"})
+     * @Route("/{id}/modifyAddress/{addressId}",
+     *        requirements={"id"="\d+", "addressId"="\d+"})
      * @Method ("POST")
      * @Template("CodersLabBundle:Contact:form.html.twig")
      */
-    public function saveChangesAction(Request $request, $id)
+    public function saveAddressChangesAction(Request $request, $id, $addressId)
     {
         $contact = $this
             ->getDoctrine()
@@ -95,59 +100,41 @@ class ContactController extends Controller
     }
 
     /**
-     * @Route ("/{id}/delete",
-     *        requirements={"id"="\d+"})
+     * @Route ("/{id}/deleteAddress/{addressId}",
+     *        requirements={"id"="\d+", "addressId"="\d+"})
      * @Method ("GET")
      */
-    public function deleteAction(Request $request, $id)
+    public function deleteAddressAction(Request $request, $id, $addressId)
     {
         $contact = $this->getDoctrine()->getRepository('CodersLabBundle:Contact')->find($id);
 
         if (!$contact) {
             throw $this->createNotFoundException('Contact not found');
         }
+
+        $address = $this->getDoctrine()->getRepository('CodersLabBundle:Address')->find($addressId);
+
+        if (!$address) {
+            throw $this->createNotFoundException('Address not found');
+        }
+
+        $contact->removeAddress($address);
 
         $entitymanager = $this->getDoctrine()->getManager();
 
-        $entitymanager->remove($contact);
+        $entitymanager->remove($address);
         $entitymanager->flush();
 
-        return $this->redirectToRoute("coderslab_contact_showall");
+        return $this->redirectToRoute('coderslab_contact_show', ['id' => $contact->getId()]);
     }
 
-    /**
-     * @Route("/{id}",
-     *        requirements={"id"="\d+"})
-     * @Method ("GET")
-     * @Template()
-     */
-    public function showAction(Request $request, $id)
+    private function createAddressForm($address)
     {
-        $contact = $this->getDoctrine()->getRepository('CodersLabBundle:Contact')->find($id);
-
-        if (!$contact) {
-            throw $this->createNotFoundException('Contact not found');
-        }
-
-        return ['contact' => $contact];
-    }
-
-    /**
-     * @Route("/")
-     * @Method ("GET")
-     * @Template()
-     */
-    public function showAllAction(Request $request)
-    {
-        return ['contacts' => $this->getDoctrine()->getRepository('CodersLabBundle:Contact')->findBy([], ['surname' => 'ASC'])];
-    }
-
-    private function createContactForm($contact)
-    {
-        $form = $this->createFormBuilder($contact)
-            ->add('name')
-            ->add('surname')
-            ->add('description')
+        $form = $this->createFormBuilder($address)
+            ->add('city')
+            ->add('street')
+            ->add('houseNumber')
+            ->add('appartamentNumber')
             ->add('Submit', 'submit')
             ->getForm();
         return $form;

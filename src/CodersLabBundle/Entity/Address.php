@@ -45,7 +45,7 @@ class Address
     /**
      * @var string
      *
-     * @ORM\Column(name="appartamentNumber", type="string", length=10)
+     * @ORM\Column(name="appartamentNumber", type="string", length=10, nullable=true)
      */
     private $appartamentNumber;
 
