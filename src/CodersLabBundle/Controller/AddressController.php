@@ -3,7 +3,6 @@
 namespace CodersLabBundle\Controller;
 
 use CodersLabBundle\Entity\Address;
-use CodersLabBundle\Entity\Contact;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
@@ -18,7 +17,7 @@ class AddressController extends Controller
      * @Method ("GET")
      * @Template("CodersLabBundle:Contact:form.html.twig")
      */
-    public function newAddressAction(Request $request)
+    public function newAction(Request $request)
     {
         $address = new Address();
 
@@ -33,7 +32,7 @@ class AddressController extends Controller
      * @Method ("POST")
      * @Template("CodersLabBundle:Contact:form.html.twig")
      */
-    public function createAddressAction(Request $request, $id)
+    public function createAction(Request $request, $id)
     {
         $contact = $this->getDoctrine()->getRepository('CodersLabBundle:Contact')->find($id);
         $address = new Address();
@@ -55,18 +54,18 @@ class AddressController extends Controller
      * @Method ("GET")
      * @Template("CodersLabBundle:Contact:form.html.twig")
      */
-    public function modifyAddressAction(Request $request, $id, $addressId)
+    public function modifyAction(Request $request, $id, $addressId)
     {
-        $contact = $this
+        $address = $this
             ->getDoctrine()
             ->getRepository('CodersLabBundle:Address')
-            ->find($id);
+            ->find($addressId);
 
-        if (!$contact) {
-            throw $this->createNotFoundException('No such contact');
+        if (!$address) {
+            throw $this->createNotFoundException('No such address');
         }
 
-        $form = $this->createContactForm($contact);
+        $form = $this->createAddressForm($address);
 
         return ['form' => $form->createView()];
     }
@@ -77,23 +76,24 @@ class AddressController extends Controller
      * @Method ("POST")
      * @Template("CodersLabBundle:Contact:form.html.twig")
      */
-    public function saveAddressChangesAction(Request $request, $id, $addressId)
+    public function saveChangesAction(Request $request, $id, $addressId)
     {
-        $contact = $this
-            ->getDoctrine()
-            ->getRepository('CodersLabBundle:Contact')
-            ->find($id);
 
-        if (!$contact) {
-            throw $this->createNotFoundException('No such contact');
+        $address = $this
+            ->getDoctrine()
+            ->getRepository('CodersLabBundle:Address')
+            ->find($addressId);
+
+        if (!$address) {
+            throw $this->createNotFoundException('No such address');
         }
 
-        $form = $this->createContactForm($contact);
+        $form = $this->createAddressForm($address);
         $form->handleRequest($request);
 
         if ($form->isSubmitted()) {
             $this->getDoctrine()->getManager()->flush();
-            return $this->redirectToRoute('coderslab_contact_show', ['id' => $contact->getId()]);
+            return $this->redirectToRoute('coderslab_contact_show', ['id' => $id]);
         }
 
         return ['form' => $form->createView()];
@@ -104,7 +104,7 @@ class AddressController extends Controller
      *        requirements={"id"="\d+", "addressId"="\d+"})
      * @Method ("GET")
      */
-    public function deleteAddressAction(Request $request, $id, $addressId)
+    public function deleteAction(Request $request, $id, $addressId)
     {
         $contact = $this->getDoctrine()->getRepository('CodersLabBundle:Contact')->find($id);
 

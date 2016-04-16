@@ -30,17 +30,17 @@
                         {{ address.street }} {{ address.houseNumber }} {{ address.appartamentNumber }}<br/>
                         {{ address.city }}
                         <a class="btn btn-primary btn-xs"
-                           href="{{ path('coderslab_contact_modifyaddress',{'id': contact.id,'addressId': address.id}) }}"
+                           href="{{ path('coderslab_address_modify',{'id': contact.id,'addressId': address.id}) }}"
                            role="button">Modify</a>
                         <a class="btn btn-danger btn-xs"
-                           href="{{ path('coderslab_contact_deleteaddress',{'id': contact.id,'addressId': address.id}) }}"
+                           href="{{ path('coderslab_address_delete',{'id': contact.id,'addressId': address.id}) }}"
                            role="button">Delete</a>
 
                     </li>
                 {% endfor %}
                 <li style="margin-top: 10px">
                     <a class="btn btn-success btn-sm"
-                       href="{{ path('coderslab_contact_newaddress',{'id': contact.id}) }}"
+                       href="{{ path('coderslab_address_new',{'id': contact.id}) }}"
                        role="button">Add</a>
                 </li>
             </ul>

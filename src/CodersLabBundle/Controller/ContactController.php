@@ -2,7 +2,6 @@
 
 namespace CodersLabBundle\Controller;
 
-use CodersLabBundle\Entity\Address;
 use CodersLabBundle\Entity\Contact;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
