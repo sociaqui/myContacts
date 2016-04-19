@@ -10,7 +10,8 @@
     <div class="container" style="width: 900px; margin: 0 auto; margin-top: 20px">
         <a class="btn btn-primary btn-sm" href="{{ path('coderslab_contact_new') }}" role="button">Add a new contact</a>
         <a class="btn btn-primary btn-sm" href="#" role="button">Groups</a>
-        <a class="btn btn-primary btn-sm" href="#" role="button">Search</a>
+        <a class="btn btn-primary btn-sm" href="{{ path('coderslab_contact_search') }}" role="button">Search</a>
+        <a class="btn btn-primary btn-sm" href="{{ path('coderslab_contact_showall') }}" role="button">Show all</a>
         <h1>Contact list:</h1>
 
         {% for contact in contacts %}

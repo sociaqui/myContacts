@@ -141,12 +141,58 @@ class ContactController extends Controller
         return ['contacts' => $this->getDoctrine()->getRepository('CodersLabBundle:Contact')->findBy([], ['surname' => 'ASC'])];
     }
 
+    /**
+     * @Route("/")
+     * @Method ("POST")
+     * @Template("CodersLabBundle:Contact:showAll.html.twig")
+     */
+    public function showSomeAction(Request $request)
+    {
+        $parameters = [
+            'name' => $request->request->get('form')['name'],
+            'surname' => $request->request->get('form')['surname'],
+            'description' => $request->request->get('form')['description'],
+            'email' => $request->request->get('form')['email'],
+            'city' => $request->request->get('form')['city'],
+            'phone' => $request->request->get('form')['phone']
+        ];
+        $contacts = $this->getDoctrine()->getRepository('CodersLabBundle:Contact')->findByParameters($parameters);
+        return ['contacts' => $contacts];
+    }
+
+    /**
+     * @Route("/search")
+     * @Method ("GET")
+     * @Template("CodersLabBundle:Contact:form.html.twig")
+     */
+    public function searchAction(Request $request)
+    {
+        $form = $this->createSearchForm();
+
+        return ['form' => $form->createView()];
+    }
+
     private function createContactForm($contact)
     {
         $form = $this->createFormBuilder($contact)
             ->add('name')
             ->add('surname')
             ->add('description')
+            ->add('Submit', 'submit')
+            ->getForm();
+        return $form;
+    }
+
+    private function createSearchForm()
+    {
+        $form = $this->createFormBuilder()
+            ->setAction($this->generateUrl("coderslab_contact_showall"))
+            ->add('name','text',['required'=>false])
+            ->add('surname','text',['required'=>false])
+            ->add('description','text',['required'=>false])
+            ->add('city','text',['required'=>false])
+            ->add('email','text',['required'=>false])
+            ->add('phone','text',['required'=>false])
             ->add('Submit', 'submit')
             ->getForm();
         return $form;
