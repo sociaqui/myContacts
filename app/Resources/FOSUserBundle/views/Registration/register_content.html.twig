@@ -1,0 +1,11 @@
+<form action="{{ path('fos_user_registration_register') }}" {{ form_enctype(form) }} method="POST"
+      class="fos_user_registration_register">
+    <div class="container well well-sm" style="width: 500px; margin: 0 auto; margin-top: 20px">
+        {% form_theme form 'bootstrap_3_layout.html.twig' %}
+        {{ form_widget(form) }}
+        <div>
+            <input class="btn btn-default" type="submit"
+                   value="{{ 'registration.submit'|trans({}, 'FOSUserBundle') }}"/>
+        </div>
+    </div>
+</form>

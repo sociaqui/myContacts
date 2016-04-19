@@ -138,6 +138,8 @@ class ContactController extends Controller
      */
     public function showAllAction(Request $request)
     {
+        $user=$this->getUser();
+
         return ['contacts' => $this->getDoctrine()->getRepository('CodersLabBundle:Contact')->findBy([], ['surname' => 'ASC'])];
     }
 

@@ -1,12 +1,8 @@
-{% extends "::base.html.twig" %}
+{% extends "FOSUserBundle::layout.html.twig" %}
 
 {% block title %}Contact details{% endblock %}
 
-{% block stylesheets %}
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
-{% endblock %}
-
-{% block body %}
+{% block fos_user_content %}
     <div class="container well well-sm" style="width: 900px; margin: 0 auto; margin-top: 20px">
         <div class="row">
             <div class="col-xs-8">
