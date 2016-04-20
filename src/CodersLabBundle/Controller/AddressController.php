@@ -17,8 +17,21 @@ class AddressController extends Controller
      * @Method ("GET")
      * @Template("CodersLabBundle:Contact:form.html.twig")
      */
-    public function newAction(Request $request)
+    public function newAction(Request $request, $id)
     {
+        $contact = $this
+            ->getDoctrine()
+            ->getRepository('CodersLabBundle:Contact')
+            ->find($id);
+
+        if (!$contact) {
+            throw $this->createNotFoundException('No such contact');
+        }
+
+        if($contact->getUser() !== $this->getUser()){
+            throw $this->createAccessDeniedException('Cannot modify contacts that do not belong to you');
+        }
+
         $address = new Address();
 
         $form = $this->createAddressForm($address);
@@ -34,10 +47,23 @@ class AddressController extends Controller
      */
     public function createAction(Request $request, $id)
     {
-        $contact = $this->getDoctrine()->getRepository('CodersLabBundle:Contact')->find($id);
+        $contact = $this
+            ->getDoctrine()
+            ->getRepository('CodersLabBundle:Contact')
+            ->find($id);
+
+        if (!$contact) {
+            throw $this->createNotFoundException('No such contact');
+        }
+
+        if($contact->getUser() !== $this->getUser()){
+            throw $this->createAccessDeniedException('Cannot modify contacts that do not belong to you');
+        }
+
         $address = new Address();
         $form = $this->createAddressForm($address);
         $form->handleRequest($request);
+
         if ($form->isSubmitted()) {
             $this->getDoctrine()->getManager()->persist($address);
             $address->setContact($contact);
@@ -56,6 +82,19 @@ class AddressController extends Controller
      */
     public function modifyAction(Request $request, $id, $addressId)
     {
+        $contact = $this
+            ->getDoctrine()
+            ->getRepository('CodersLabBundle:Contact')
+            ->find($id);
+
+        if (!$contact) {
+            throw $this->createNotFoundException('No such contact');
+        }
+
+        if($contact->getUser() !== $this->getUser()){
+            throw $this->createAccessDeniedException('Cannot modify contacts that do not belong to you');
+        }
+
         $address = $this
             ->getDoctrine()
             ->getRepository('CodersLabBundle:Address')
@@ -78,6 +117,19 @@ class AddressController extends Controller
      */
     public function saveChangesAction(Request $request, $id, $addressId)
     {
+
+        $contact = $this
+            ->getDoctrine()
+            ->getRepository('CodersLabBundle:Contact')
+            ->find($id);
+
+        if (!$contact) {
+            throw $this->createNotFoundException('No such contact');
+        }
+
+        if($contact->getUser() !== $this->getUser()){
+            throw $this->createAccessDeniedException('Cannot modify contacts that do not belong to you');
+        }
 
         $address = $this
             ->getDoctrine()
@@ -106,10 +158,17 @@ class AddressController extends Controller
      */
     public function deleteAction(Request $request, $id, $addressId)
     {
-        $contact = $this->getDoctrine()->getRepository('CodersLabBundle:Contact')->find($id);
+        $contact = $this
+            ->getDoctrine()
+            ->getRepository('CodersLabBundle:Contact')
+            ->find($id);
 
         if (!$contact) {
-            throw $this->createNotFoundException('Contact not found');
+            throw $this->createNotFoundException('No such contact');
+        }
+
+        if($contact->getUser() !== $this->getUser()){
+            throw $this->createAccessDeniedException('Cannot modify contacts that do not belong to you');
         }
 
         $address = $this->getDoctrine()->getRepository('CodersLabBundle:Address')->find($addressId);

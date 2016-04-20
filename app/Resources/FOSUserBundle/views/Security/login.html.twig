@@ -22,11 +22,14 @@
             <label class="control-label"
                    for="remember_me">{{ 'security.login.remember_me'|trans({}, 'FOSUserBundle') }}</label>
 
-            <input class="btn btn-default" type="submit" id="_submit" name="_submit"
+            <input class="btn btn-success btn-sm" type="submit" id="_submit" name="_submit"
                    value="{{ 'security.login.submit'|trans({}, 'FOSUserBundle') }}"/>
-            <a class="btn btn-default" href="{{ path('fos_user_registration_register') }}">
+            <a class="btn btn-primary btn-sm" href="{{ path('fos_user_registration_register') }}">
                 {{ 'layout.register'|trans({}, 'FOSUserBundle') }}
+            </a>
+            <a class="btn btn-danger btn-sm" href="{{ path('fos_user_resetting_request') }}">
+                Forgot your password?
             </a>
         </form>
     </div>
-{% endblock fos_user_content %}
+{% endblock %}

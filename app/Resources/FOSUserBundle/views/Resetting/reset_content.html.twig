@@ -4,7 +4,7 @@
         {% form_theme form 'bootstrap_3_layout.html.twig' %}
         {{ form_widget(form) }}
         <div>
-            <input type="submit" value="{{ 'resetting.reset.submit'|trans({}, 'FOSUserBundle') }}"/>
+            <input class="btn btn-danger" type="submit" value="{{ 'resetting.reset.submit'|trans({}, 'FOSUserBundle') }}"/>
         </div>
     </form>
 </div>

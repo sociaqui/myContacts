@@ -12,6 +12,9 @@
                 <a class="btn btn-primary btn-sm" href="{{ path('fos_user_security_logout') }}">
                     {{ 'layout.logout'|trans({}, 'FOSUserBundle') }}
                 </a>
+                <a class="btn btn-primary btn-sm" href="{{ path('fos_user_change_password') }}">
+                    {{ 'change_password.submit'|trans({}, 'FOSUserBundle') }}
+                </a>
             {% else %}
                 <a class="btn btn-default" href="{{ path('fos_user_security_login') }}">{{ 'layout.login'|trans({}, 'FOSUserBundle') }}</a>
             {% endif %}
@@ -26,6 +29,7 @@
         {% endfor %}
 
         <div>
+            <br/>
             {% block fos_user_content %}
             {% endblock fos_user_content %}
         </div>

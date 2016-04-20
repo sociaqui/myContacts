@@ -57,6 +57,12 @@ class Contact
      */
     private $phones;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="User")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $user;
+
 
     /**
      * Constructor
@@ -244,5 +250,21 @@ class Contact
     public function getPhones()
     {
         return $this->phones;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getUser()
+    {
+        return $this->user;
+    }
+
+    /**
+     * @param mixed $user
+     */
+    public function setUser(User $user)
+    {
+        $this->user = $user;
     }
 }

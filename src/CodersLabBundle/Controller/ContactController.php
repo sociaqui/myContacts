@@ -36,6 +36,7 @@ class ContactController extends Controller
         $form = $this->createContactForm($contact);
         $form->handleRequest($request);
         if ($form->isSubmitted()) {
+            $contact->setUser($this->getUser());
             $this->getDoctrine()->getManager()->persist($contact);
             $this->getDoctrine()->getManager()->flush();
             return $this->redirectToRoute('coderslab_contact_show', ['id' => $contact->getId()]);
@@ -60,6 +61,10 @@ class ContactController extends Controller
             throw $this->createNotFoundException('No such contact');
         }
 
+        if($contact->getUser() !== $this->getUser()){
+            throw $this->createAccessDeniedException('Cannot modify contacts that do not belong to you');
+        }
+
         $form = $this->createContactForm($contact);
 
         return ['form' => $form->createView()];
@@ -80,6 +85,10 @@ class ContactController extends Controller
 
         if (!$contact) {
             throw $this->createNotFoundException('No such contact');
+        }
+
+        if($contact->getUser() !== $this->getUser()){
+            throw $this->createAccessDeniedException('Cannot modify contacts that do not belong to you');
         }
 
         $form = $this->createContactForm($contact);
@@ -106,6 +115,10 @@ class ContactController extends Controller
             throw $this->createNotFoundException('Contact not found');
         }
 
+        if($contact->getUser() !== $this->getUser()){
+            throw $this->createAccessDeniedException('Cannot delete contacts that do not belong to you');
+        }
+
         $entitymanager = $this->getDoctrine()->getManager();
 
         $entitymanager->remove($contact);
@@ -128,6 +141,10 @@ class ContactController extends Controller
             throw $this->createNotFoundException('Contact not found');
         }
 
+        if($contact->getUser() !== $this->getUser()){
+            throw $this->createAccessDeniedException('Cannot see contacts that do not belong to you');
+        }
+
         return ['contact' => $contact];
     }
 
@@ -138,9 +155,9 @@ class ContactController extends Controller
      */
     public function showAllAction(Request $request)
     {
-        $user=$this->getUser();
+        $user=$this->getUser()->getId();
 
-        return ['contacts' => $this->getDoctrine()->getRepository('CodersLabBundle:Contact')->findBy([], ['surname' => 'ASC'])];
+        return ['contacts' => $this->getDoctrine()->getRepository('CodersLabBundle:Contact')->findBy(['user' => $user], ['surname' => 'ASC'])];
     }
 
     /**
@@ -151,6 +168,7 @@ class ContactController extends Controller
     public function showSomeAction(Request $request)
     {
         $parameters = [
+            'user' => $this->getUser()->getId(),
             'name' => $request->request->get('form')['name'],
             'surname' => $request->request->get('form')['surname'],
             'description' => $request->request->get('form')['description'],

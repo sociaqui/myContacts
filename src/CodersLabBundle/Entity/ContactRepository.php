@@ -20,13 +20,15 @@ class ContactRepository extends EntityRepository
                                       LEFT JOIN contact.addresses address
                                       LEFT JOIN contact.emails email
                                       LEFT JOIN contact.phones phone
-                                    WHERE COALESCE(contact.name,'') LIKE :name
+                                    WHERE contact.user = :user
+                                      AND COALESCE(contact.name,'') LIKE :name
                                       AND COALESCE(contact.surname,'') LIKE :surname
                                       AND COALESCE(contact.description,'') LIKE :description
                                       AND COALESCE(address.city,'') LIKE :city
                                       AND COALESCE(email.address,'') LIKE :email
                                       AND COALESCE(phone.number,'') LIKE :phone
                                     ORDER BY contact.surname ASC")
+            ->setParameter('user', $parameters['user'])
             ->setParameter('name', '%' . $parameters['name'] . '%')
             ->setParameter('surname', '%' . $parameters['surname'] . '%')
             ->setParameter('description', '%' . $parameters['description'] . '%')
