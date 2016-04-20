@@ -1,0 +1,28 @@
+{% extends "FOSUserBundle::layout.html.twig" %}
+
+{% block title %}Groups{% endblock %}
+
+{% block fos_user_content %}
+
+    <a class="btn btn-success btn-sm" href="{{ path('coderslab_grouping_new') }}" role="button">Add a new group</a>
+    <a class="btn btn-primary btn-sm" href="{{ path('coderslab_contact_showall') }}" role="button">Back to list</a>
+    <h1>Groups:</h1>
+
+    {% for grouping in groupings %}
+        <div class="container well well-sm" style="width: 750px; margin: 0 auto; margin-top: 20px">
+            <div class="col-xs-8">
+                <h1>{{ grouping.name }}</h1>
+                <p>{{ grouping.description }}</p>
+            </div>
+            <div class="col-xs-4" style="margin-top: 15px">
+                <a class="btn btn-primary btn-sm" href="{{ path('coderslab_grouping_show',{'id': grouping.id}) }}"
+                   role="button">Show</a>
+                <a class="btn btn-primary btn-sm" href="{{ path('coderslab_grouping_modify',{'id': grouping.id}) }}"
+                   role="button">Modify</a>
+                <a class="btn btn-danger btn-sm" href="{{ path('coderslab_grouping_delete',{'id': grouping.id}) }}"
+                   role="button">Delete</a>
+            </div>
+        </div>
+    {% endfor %}
+
+{% endblock %}

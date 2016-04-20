@@ -63,6 +63,11 @@ class Contact
      */
     private $user;
 
+    /**
+     * @ORM\ManyToMany(targetEntity="Grouping", inversedBy="contacts")
+     */
+    private $groups;
+
 
     /**
      * Constructor
@@ -72,6 +77,17 @@ class Contact
         $this->addresses = new \Doctrine\Common\Collections\ArrayCollection();
         $this->emails = new \Doctrine\Common\Collections\ArrayCollection();
         $this->phones = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->groups = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Serialize
+     *
+     * @return string
+     */
+    public function __toString()
+    {
+        return $this->name.' '.$this->surname;
     }
 
     /**
@@ -266,5 +282,38 @@ class Contact
     public function setUser(User $user)
     {
         $this->user = $user;
+    }
+
+    /**
+     * Add group
+     *
+     * @param \CodersLabBundle\Entity\Grouping $group
+     * @return Contact
+     */
+    public function addGroup(\CodersLabBundle\Entity\Grouping $group)
+    {
+        $this->groups[] = $group;
+
+        return $this;
+    }
+
+    /**
+     * Remove group
+     *
+     * @param \CodersLabBundle\Entity\Grouping $group
+     */
+    public function removeGroup(\CodersLabBundle\Entity\Grouping $group)
+    {
+        $this->groups->removeElement($group);
+    }
+
+    /**
+     * Get groups
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getGroups()
+    {
+        return $this->groups;
     }
 }
